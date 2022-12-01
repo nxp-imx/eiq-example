@@ -1,0 +1,8 @@
+NXP Software Content Register
+
+Package:                     eiq-examples.git
+Outgoing License:            Apache-2.0 
+License File:                LICENSE
+Type of Content:             source
+Description and comments:    eiq examples includes some demo applications based on Tensorflow-lite python API
+Release Location:            https://github.com/nxpmicro/eiq-examples
