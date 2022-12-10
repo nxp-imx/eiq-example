@@ -49,6 +49,11 @@ parser.add_argument(
     '--input',
     default='/dev/video0',
     help='input to be classified')
+parser.add_argument(
+    '-d',
+    '--delegate',
+    default='',
+    help='delegate path')
 args = parser.parse_args()
 capture = cv2.VideoCapture(args.input)
 ret, frame = capture.read()
@@ -56,7 +61,7 @@ if (frame is None):
     print("Can't read frame from source file ", args.input)
     exit(0)
 
-detector = HandTracker(PALM_MODEL_PATH, LANDMARK_MODEL_PATH, ANCHORS_PATH, box_shift=0.2, box_enlarge=1.3)
+detector = HandTracker(PALM_MODEL_PATH, LANDMARK_MODEL_PATH, ANCHORS_PATH, args.delegate, box_shift=0.2, box_enlarge=1.3)
 
 while ret:
     image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)

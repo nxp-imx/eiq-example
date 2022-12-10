@@ -49,6 +49,11 @@ if __name__ == '__main__':
       default='labels.txt',
       help='name of file containing labels')
   parser.add_argument(
+      '-d',
+      '--delegate',
+      default='',
+      help='delegate path')
+  parser.add_argument(
       '--input_mean',
       default=127.5, type=float,
       help='input_mean')
@@ -60,8 +65,11 @@ if __name__ == '__main__':
       '--num_threads', default=None, type=int, help='number of threads')
   args = parser.parse_args()
 
-  interpreter = tflite.Interpreter(
-      model_path=args.model_file, num_threads=args.num_threads)
+  if(args.delegate):
+      ext_delegate = [tflite.load_delegate(args.delegate)]
+      interpreter = tflite.Interpreter(model_path=args.model_file, experimental_delegates=ext_delegate)
+  else:
+      interpreter = tflite.Interpreter(model_path=args.model_file)
   interpreter.allocate_tensors()
 
   input_details = interpreter.get_input_details()

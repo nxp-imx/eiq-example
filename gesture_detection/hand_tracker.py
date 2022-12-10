@@ -27,14 +27,19 @@ class HandTracker():
         >>> keypoints, bbox = det(input_img)
     """
 
-    def __init__(self, palm_model, joint_model, anchors_path,
+    def __init__(self, palm_model, joint_model, anchors_path, delegate_path,
                 box_enlarge=1.5, box_shift=0.2):
         self.box_shift = box_shift
         self.box_enlarge = box_enlarge
 
-        self.interp_palm = tflite.Interpreter(palm_model)
+        if(delegate_path):
+            ext_delegate = [tflite.load_delegate(delegate_path)]
+            self.interp_palm = tflite.Interpreter(palm_model, experimental_delegates=ext_delegate)
+            self.interp_joint = tflite.Interpreter(joint_model, experimental_delegates=ext_delegate)
+        else:
+            self.interp_palm = tflite.Interpreter(palm_model)
+            self.interp_joint = tflite.Interpreter(joint_model)
         self.interp_palm.allocate_tensors()
-        self.interp_joint = tflite.Interpreter(joint_model)
         self.interp_joint.allocate_tensors()
         
         # reading the SSD anchors

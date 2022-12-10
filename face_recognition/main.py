@@ -7,14 +7,27 @@
 import cv2
 import time, math
 import numpy as np
+import argparse
 
 from face_detection import YoloFace
 from face_recognition import Facenet
 from face_database import FaceDatabase
 
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    '-i',
+    '--input',
+    default='/dev/video0',
+    help='input device')
+parser.add_argument(
+    '-d',
+    '--delegate',
+    default='',
+    help='delegate path')
+args = parser.parse_args()
 
-detector = YoloFace("../vela_models/yoloface_int8_vela.tflite")
-recognizer = Facenet("../vela_models/facenet_512_int_quantized_vela.tflite")
+detector = YoloFace("../vela_models/yoloface_int8_vela.tflite", args.delegate)
+recognizer = Facenet("../vela_models/facenet_512_int_quantized_vela.tflite", args.delegate)
 database = FaceDatabase()
 
 def ischar(c):
@@ -52,7 +65,7 @@ def print_longtext(img, text):
                     1, (0, 255, 0), 2, lineType = cv2.LINE_AA)
 
 
-vid = cv2.VideoCapture(0)
+vid = cv2.VideoCapture(args.input)
 PADDING = 10
 tips = "Press 'a' to add person, 'd' to delete person, 'p' to print database"
 while True:

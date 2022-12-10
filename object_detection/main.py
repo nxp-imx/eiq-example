@@ -21,11 +21,20 @@ parser.add_argument(
     '--input',
     default='/dev/video0',
     help='input to be classified')
+parser.add_argument(
+    '-d',
+    '--delegate',
+    default='',
+    help='delegate path')
 args = parser.parse_args()
 
 vid = cv2.VideoCapture(args.input)
 
-interpreter = tflite.Interpreter(model_path=MODEL_PATH)
+if(args.delegate):
+    ext_delegate = [tflite.load_delegate(args.delegate)]
+    interpreter = tflite.Interpreter(model_path=MODEL_PATH, experimental_delegates=ext_delegate)
+else:
+    interpreter = tflite.Interpreter(model_path=MODEL_PATH)
 interpreter.allocate_tensors()
 
 input_details = interpreter.get_input_details()

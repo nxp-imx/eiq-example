@@ -13,8 +13,12 @@ class EyeMesher:
     EYE_KEY_NUM = 71
     IRIS_KEY_NUM = 5
 
-    def __init__(self, model_path):
-        self.interpreter = tflite.Interpreter(model_path=model_path)
+    def __init__(self, model_path, delegate_path):
+        if(delegate_path):
+            ext_delegate = [tflite.load_delegate(delegate_path)]
+            self.interpreter = tflite.Interpreter(model_path=model_path, experimental_delegates=ext_delegate)
+        else:
+            self.interpreter = tflite.Interpreter(model_path=model_path)
         self.interpreter.allocate_tensors()
         self.input_idx = self.interpreter.get_input_details()[0]['index']
         self.input_shape = self.interpreter.get_input_details()[0]['shape'][1:3]

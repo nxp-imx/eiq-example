@@ -25,11 +25,15 @@ ANCHOR_STRIDES = [8, 16]
 ANCHOR_NUM = [2, 6]
 
 class FaceDetector:
-    def __init__(self, model_path, img_size
+    def __init__(self, model_path, delegate_path, img_size,
                  left_eye_pos=(0.38, 0.38),
                  target_width=192,
                  target_height=None):
-        self.interpreter = tflite.Interpreter(model_path=model_path)
+        if(delegate_path):
+            ext_delegate = [tflite.load_delegate(delegate_path)]
+            self.interpreter = tflite.Interpreter(model_path=model_path, experimental_delegates=ext_delegate)
+        else:
+            self.interpreter = tflite.Interpreter(model_path=model_path)
         self.interpreter.allocate_tensors()
         self.input_idx = self.interpreter.get_input_details()[0]['index']
         self.input_shape = self.interpreter.get_input_details()[0]['shape'][1:3]
@@ -82,13 +86,13 @@ class FaceDetector:
             scores = scores[keep_mask]
 
             return bboxes_decoded, landmarks, scores
-       else:
+        else:
             return np.array([]), np.array([]), np.array([])
 
     def decode(self, scores, bboxes):
         w, h = self.input_shape
-        top_score = np.sort(scores)[-self.MAX_FACE_NUM]
-        cls_mask = scores >= max(self.SCORE_THRESH, top_score)
+        top_score = np.sort(scores)[-MAX_FACE_NUM]
+        cls_mask = scores >= max(SCORE_THRESH, top_score)
         if cls_mask.sum() == 0:
             return np.array([]), np.array([]), np.array([])
 
@@ -125,7 +129,7 @@ class FaceDetector:
     def create_anchors(cls, input_shape):
         w, h = input_shape
         anchors = []
-        for s, a_num in zip(cls.ANCHOR_STRIDES, cls.ANCHOR_NUM):
+        for s, a_num in zip(ANCHOR_STRIDES, ANCHOR_NUM):
             gridCols = (w + s - 1) // s
             gridRows = (h + s - 1) // s
             x, y = np.meshgrid(np.arange(gridRows), np.arange(gridCols))
@@ -186,6 +190,6 @@ class FaceDetector:
     def decode_pose(self, landmarks):
         landmarks = landmarks.astype(np.float).reshape(-1, 2)
         (_, rotation_vector, translation_vector) = cv2.solvePnP(
-            self.FACE_MODEL_3D, landmarks, self.camera_matrix, self.dist_coeffs)
+            FACE_MODEL_3D, landmarks, self.camera_matrix, self.dist_coeffs)
 
         return rotation_vector, translation_vector

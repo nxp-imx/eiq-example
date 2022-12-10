@@ -26,6 +26,11 @@ parser.add_argument(
     '--input',
     default='/dev/video0',
     help='input to be classified')
+parser.add_argument(
+    '-d',
+    '--delegate',
+    default='',
+    help='delegate path')
 args = parser.parse_args()
 
 cap = cv2.VideoCapture(args.input)
@@ -38,10 +43,11 @@ h, w, _ = image.shape
 target_dim = max(w, h)
 
 # instantiate face models
-face_detector = FaceDetector(model_path = str(MODEL_PATH / DETECT_MODEL), 
+face_detector = FaceDetector(model_path = str(MODEL_PATH / DETECT_MODEL),
+                             delegate_path = args.delegate,
                              img_size = (target_dim, target_dim))
-face_mesher = FaceMesher(model_path=str((MODEL_PATH / LANDMARK_MODEL)))
-eye_mesher = EyeMesher(model_path=str((MODEL_PATH / EYE_MODEL)))
+face_mesher = FaceMesher(model_path=str((MODEL_PATH / LANDMARK_MODEL)), delegate_path = args.delegate)
+eye_mesher = EyeMesher(model_path=str((MODEL_PATH / EYE_MODEL)), delegate_path = args.delegate)
 
 def draw_face_box(image, bboxes, landmarks, scores):
     for bbox, landmark, score in zip(bboxes.astype(int), landmarks.astype(int), scores):
