@@ -3,7 +3,7 @@ NXP Software Content Register
 Package:                     eiq-examples.git
 Outgoing License:            Apache-2.0 
 License File:                LICENSE
-Type of Content:             source
+Type of Content:             source and test pictures
 Description and comments:    eiq examples includes some demo applications based on Tensorflow-lite python API
 Release Location:            https://github.com/nxp-imx/eiq-examples
 Origin:                      NXP (Apache-2.0)
@@ -16,11 +16,12 @@ Component:                   TensorFlow Lite image classification demo
 Outgoing License:            Apache-2.0
 License File:                LICENSE
 Package Category:            TensorFlow Lite image classification demo
-Type of Content:             source
+Type of Content:             source and test pictures
 Description and comments:    This 'label_image.py' script shows how you can load a pre-trained and converted
                              TensorFlow Lite model and use it to recognize objects in images.
 Origin:                      tensorflow v2.10.0 (Apache-2.0) - https://github.com/tensorflow/tensorflow
 File location:               image_classification/label_image.py
+                             image_classification/grace_hopper.bmp
 
 ----------------------------------------------------
 Included hand tracker demo
