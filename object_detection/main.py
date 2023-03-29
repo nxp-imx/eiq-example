@@ -13,7 +13,7 @@ import argparse
 
 from labels import label2string
 
-MODEL_PATH = "../vela_models/ssd_mobilenet_v1_quant_vela.tflite"
+MODEL_PATH = "../models/ssd_mobilenet_v1_quant.tflite"
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -28,7 +28,11 @@ parser.add_argument(
     help='delegate path')
 args = parser.parse_args()
 
-vid = cv2.VideoCapture(args.input)
+if args.input.isdigit():
+    cap_input = int(args.input)
+else:
+    cap_input = args.input
+vid = cv2.VideoCapture(cap_input)
 
 if(args.delegate):
     ext_delegate = [tflite.load_delegate(args.delegate)]

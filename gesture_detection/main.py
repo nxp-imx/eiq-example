@@ -1,5 +1,5 @@
 #
-# Copyright 2020-2022 NXP
+# Copyright 2020-2023 NXP
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -9,8 +9,8 @@ import time
 import argparse
 from hand_tracker import HandTracker
 
-PALM_MODEL_PATH = "../vela_models/palm_detection_builtin_256_integer_quant_vela.tflite"
-LANDMARK_MODEL_PATH = "../vela_models/hand_landmark_3d_256_integer_quant_vela.tflite"
+PALM_MODEL_PATH = "../models/palm_detection_builtin_256_integer_quant.tflite"
+LANDMARK_MODEL_PATH = "../models/hand_landmark_3d_256_integer_quant.tflite"
 ANCHORS_PATH = "anchors.csv"
 
 def draw_landmarks(points, frame):
@@ -55,7 +55,12 @@ parser.add_argument(
     default='',
     help='delegate path')
 args = parser.parse_args()
-capture = cv2.VideoCapture(args.input)
+
+if args.input.isdigit():
+    cap_input = int(args.input)
+else:
+    cap_input = args.input
+capture = cv2.VideoCapture(cap_input)
 ret, frame = capture.read()
 if (frame is None):
     print("Can't read frame from source file ", args.input)

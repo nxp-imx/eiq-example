@@ -1,5 +1,5 @@
 #
-# Copyright 2020-2022 NXP
+# Copyright 2020-2023 NXP
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -26,8 +26,8 @@ parser.add_argument(
     help='delegate path')
 args = parser.parse_args()
 
-detector = YoloFace("../vela_models/yoloface_int8_vela.tflite", args.delegate)
-recognizer = Facenet("../vela_models/facenet_512_int_quantized_vela.tflite", args.delegate)
+detector = YoloFace("../models/yoloface_int8.tflite", args.delegate)
+recognizer = Facenet("../models/facenet_512_int_quantized.tflite", args.delegate)
 database = FaceDatabase()
 
 def ischar(c):
@@ -64,8 +64,11 @@ def print_longtext(img, text):
         cv2.putText(img, line, (30, y), cv2.FONT_HERSHEY_SIMPLEX,
                     1, (0, 255, 0), 2, lineType = cv2.LINE_AA)
 
-
-vid = cv2.VideoCapture(args.input)
+if args.input.isdigit():
+    cap_input = int(args.input)
+else:
+    cap_input = args.input
+vid = cv2.VideoCapture(cap_input)
 PADDING = 10
 tips = "Press 'a' to add person, 'd' to delete person, 'p' to print database"
 while True:

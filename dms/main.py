@@ -1,5 +1,5 @@
 #
-# Copyright 2020-2022 NXP
+# Copyright 2020-2023 NXP
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -14,10 +14,10 @@ from eye_landmark import EyeMesher
 from face_landmark import FaceMesher
 from utils import *
 
-MODEL_PATH = pathlib.Path("../vela_models/")
-DETECT_MODEL = "face_detection_front_128_full_integer_quant_vela.tflite"
-LANDMARK_MODEL = "face_landmark_192_integer_quant_vela.tflite"
-EYE_MODEL = "iris_landmark_quant_vela.tflite"
+MODEL_PATH = pathlib.Path("../models/")
+DETECT_MODEL = "face_detection_front_128_full_integer_quant.tflite"
+LANDMARK_MODEL = "face_landmark_192_integer_quant.tflite"
+EYE_MODEL = "iris_landmark_quant.tflite"
 
 # turn on camera
 parser = argparse.ArgumentParser()
@@ -33,7 +33,11 @@ parser.add_argument(
     help='delegate path')
 args = parser.parse_args()
 
-cap = cv2.VideoCapture(args.input)
+if args.input.isdigit():
+    cap_input = int(args.input)
+else:
+    cap_input = args.input
+cap = cv2.VideoCapture(cap_input)
 ret, image = cap.read()
 if not ret:
     print("Can't read frame from source file ", args.input)

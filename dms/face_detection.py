@@ -188,7 +188,7 @@ class FaceDetector:
 
 
     def decode_pose(self, landmarks):
-        landmarks = landmarks.astype(np.float).reshape(-1, 2)
+        landmarks = landmarks.astype(float).reshape(-1, 2)
         (_, rotation_vector, translation_vector) = cv2.solvePnP(
             FACE_MODEL_3D, landmarks, self.camera_matrix, self.dist_coeffs)
 
