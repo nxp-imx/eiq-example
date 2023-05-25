@@ -75,6 +75,8 @@ while True:
     embeddings = None
 
     ret, img = vid.read()
+    if (ret == False):
+        break
     boxes = detector.detect(img)
     for box in boxes:
         box[[0,2]] *= img.shape[1]
@@ -111,3 +113,7 @@ while True:
         cv2.imshow('img', img)
         while cv2.waitKey(100) & 0xFF == 0xFF:
             pass
+
+time.sleep(2)
+vid.release()
+cv2.destroyAllWindows()
