@@ -78,6 +78,6 @@ while ret:
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-time.sleep(2)
+cv2.waitKey(2000)
 capture.release()
 cv2.destroyAllWindows()
