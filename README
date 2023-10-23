@@ -1,5 +1,0 @@
-1. Download the models.
-   $python3 download_models.py
-2. Run the demo
-   $cd object_detection
-   $python3 main.py
